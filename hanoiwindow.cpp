@@ -5,21 +5,26 @@
 #include "move.h"
 #include "math.h"
 #include <stack>
+//#include <iostream>
+#include <queue>
 
 #include "QtWidgets"
 HanoiWindow::HanoiWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::HanoiWindow)
 {
+
     /*
     Pole *left;
     Pole *center;
     Pole *right;
     bool moving = false;
-    std::stack<Move> playerMoves;
+    std::stack<Move*> playerMoves;
+    std::queue<Move*> autoMoves;
     Pole *source;
     Pole *dest;
     */
+
     ui->setupUi(this);
     ui->sbNumDisks->hide(); //initially hides spinbox
     int numDisks = ui->sbNumDisks->value();
@@ -30,6 +35,7 @@ HanoiWindow::HanoiWindow(QWidget *parent) :
         left->addDisk(new Disk(i));
     }
     //initial setup done
+
 
 }
 void HanoiWindow::paintDisk(Pole *p, int diskIndex, QPushButton *b){
@@ -68,12 +74,15 @@ void HanoiWindow::paintEvent(QPaintEvent *event){
     //elipse
     //square
     //elipse
+//std::cout << ui->centralWidget->height() << std::endl;
     int x = ui->btnLeft->x();
     x = ui->btnCenter->x();
     x = ui->btnRight->x();
     paintAllDisks(left,ui->btnLeft);
     paintAllDisks(center,ui->btnCenter);
     paintAllDisks(right,ui->btnRight);
+
+
         /*&static const QPoint hourHand[3] = {
         QPoint(7, 8),
         QPoint(-7, 8),
@@ -183,8 +192,8 @@ void HanoiWindow::click(Pole *p){
             m->move();
         }
         else{
-            source = nullptr;
-            dest = nullptr;
+            source = 0;//nullptr;
+            dest = 0;//nullptr;
             moving = false;
             p->hover = false;
         }
@@ -199,7 +208,18 @@ void HanoiWindow::click(Pole *p){
 
 //grab size and location of button
 //resize elipse and square
-
+void HanoiWindow::reset(){
+    ui->btnCenter->show();
+    ui->btnLeft->show();
+    ui->btnRight->show();
+    left->numDisks = 0;
+    center->numDisks = 0;
+    right->numDisks = 0;
+    for(int i = ui->sbNumDisks->value(); i > 0; i--){
+        left->addDisk(new Disk(i));
+    }
+    repaint();
+}
 void HanoiWindow::on_actionUndo_Move_triggered()
 {
     left->hover = false;
@@ -212,4 +232,90 @@ void HanoiWindow::on_actionUndo_Move_triggered()
     playerMoves.pop();
     repaint();
 
+}
+
+void HanoiWindow::on_actionReset_Game_triggered()
+{
+    reset();
+}
+
+
+void HanoiWindow::on_actionSet_Disks_triggered()
+{
+    ui->btnCenter->hide();
+    ui->btnLeft->hide();
+    ui->btnRight->hide();
+    left->numDisks = 0;
+    center->numDisks = 0;
+    right->numDisks = 0;
+    ui->sbNumDisks->show();
+}
+
+void HanoiWindow::on_actionNew_Game_triggered()
+{
+    reset();
+    ui->sbNumDisks->hide();
+
+}
+
+void HanoiWindow::on_actionExit_triggered()
+{
+    exit(0);
+}
+void HanoiWindow::delay(){
+    if(autoMoves.empty()){
+        timer->stop();
+    }
+    else{
+        Move *m = autoMoves.front();
+        m->move();
+        autoMoves.pop();
+        repaint();
+    }
+}
+void HanoiWindow::on_actionAuto_Play_triggered()
+{
+    autoPlayHanoi(ui->sbNumDisks->value(),left,center,right);
+    reset();
+    timer = new QTimer(this);
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(delay()));
+    //connect(timer,SIGNAL(timeout()),this,SLOT())
+    timer->start(5);
+
+}
+void HanoiWindow::autoPlayHanoi(int disk,Pole *source, Pole *dest, Pole *spare){
+    Move *m;
+    if(disk == 1){
+        m = new Move(source,dest);
+        autoMoves.push(m);
+        m->move();
+    }
+    else{
+        autoPlayHanoi(disk-1,source,spare,dest);
+        m = new Move(source,dest);
+        autoMoves.push(m);
+        m->move();
+        autoPlayHanoi(disk-1,spare,dest,source);
+    }
+}
+void HanoiWindow::undo(){
+    if(!playerMoves.empty()){
+        Move *m = playerMoves.top();
+        m->reverseMove();
+        playerMoves.pop();
+    }
+    else{
+        timer->stop();
+    }
+}
+
+void HanoiWindow::on_actionUndo_All_triggered()
+{
+    timer = new QTimer(this);
+
+    connect(timer, SIGNAL(timeout()), this, SLOT(undo()));
+
+    //connect(timer,SIGNAL(timeout()),this,SLOT())
+    timer->start(50);
 }

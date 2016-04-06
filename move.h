@@ -8,8 +8,8 @@ class Move : public QWidget
 {
     Q_OBJECT
 
-    Pole *from = nullptr;
-    Pole *to = nullptr;
+    Pole *from;// = nullptr;
+    Pole *to;// = nullptr;
 
 public:
     explicit Move(QWidget *parent = 0);
