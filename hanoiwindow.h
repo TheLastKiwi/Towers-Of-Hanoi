@@ -38,6 +38,8 @@ private slots:
 
     void on_btnRight_clicked();
 
+    void on_actionUndo_Move_triggered();
+
 private:
     Ui::HanoiWindow *ui;
 };

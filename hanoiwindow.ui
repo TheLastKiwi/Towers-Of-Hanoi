@@ -170,6 +170,9 @@
    <property name="text">
     <string>Undo Move</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="actionAuto_Play">
    <property name="text">

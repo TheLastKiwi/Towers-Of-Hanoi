@@ -199,3 +199,17 @@ void HanoiWindow::click(Pole *p){
 
 //grab size and location of button
 //resize elipse and square
+
+void HanoiWindow::on_actionUndo_Move_triggered()
+{
+    left->hover = false;
+    center->hover = false;
+    right->hover = false;
+    moving = false;
+    if(playerMoves.empty())return;
+    Move *m = playerMoves.top();
+    m->reverseMove();
+    playerMoves.pop();
+    repaint();
+
+}
