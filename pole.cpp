@@ -24,6 +24,7 @@ Disk* Pole::getTopDisk(){
 }
 
 int Pole::getTopSize(){
+    if (numDisks == 0) return 100;//magic number max size
     return(stack[numDisks-1].getSize());
 }
 void Pole::removeDisk(){

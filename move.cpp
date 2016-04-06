@@ -8,7 +8,8 @@ bool Move::isValidMove(){
 }
 
 bool Move::isValidMove(Pole *f, Pole *t){
-    if (t->getTopSize() > f->getTopSize()) return false;
+    if (t->getTopSize() <= f->getTopSize()) return false; //illegal move big on small
+    //if (t->getTopSize() == f->getTopSize()) return false; //same location no move
     return true;
 }
 
