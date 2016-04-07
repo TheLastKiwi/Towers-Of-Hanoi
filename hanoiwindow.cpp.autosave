@@ -46,15 +46,20 @@ void HanoiWindow::paintDisk(Pole *p, int diskIndex, QPushButton *b){
     QPainter painter(this);
     int diskWidth = getWidth(b->width(),p->stack[diskIndex].getSize());
     int diskHeight = std::min((b->height()/2)/ui->sbNumDisks->value(),ui->sbNumDisks->value()*9/4);
-    int center = b->x()+b->width()/2;
+    int xAxis = b->x()+b->width()/2;
     int yAxis = b->height()*3/4;
 
     int elipseHeight = diskWidth*4/9;
 
-    QPoint c(center,yAxis-diskHeight*diskIndex);
+    QPoint c(xAxis,yAxis-diskHeight*diskIndex);
     //20+
 
-    painter.drawEllipse(c,diskWidth,elipseHeight);
+    painter.drawEllipse(c,diskWidth,elipseHeight);//bottom Elipse
+    painter.drawRect();
+    painter.drawEllipse();//top Elipse
+    painter.drawEllipse();//center hole
+    painter.drawRect();//pole
+    
     //QBrush *b = new QBrush(QColor(Qt::red));
     //painter.
 

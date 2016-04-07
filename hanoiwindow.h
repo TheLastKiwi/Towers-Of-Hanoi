@@ -28,6 +28,7 @@ class HanoiWindow : public QMainWindow
     void paintDisk(Pole *p, int diskIndex, QPushButton *b);
     void paintHover(Pole *p, int diskIndex, QPushButton *b);
     void paintAllDisks(Pole *p, QPushButton *b);
+    int getWidth(int width, int size);
     void reset();
 public:
 
