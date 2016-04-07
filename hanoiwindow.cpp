@@ -251,7 +251,7 @@ void HanoiWindow::on_actionAuto_Play_triggered()
 {
 
     autoPlayHanoi(ui->sbNumDisks->value(),left,center,right);
-    //reset();
+    reset();
     timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(delay()));
