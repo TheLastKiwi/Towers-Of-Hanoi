@@ -29,6 +29,7 @@ class HanoiWindow : public QMainWindow
     void paintHover(Pole *p, int diskIndex, QPushButton *b);
     void paintAllDisks(Pole *p, QPushButton *b);
     int getWidth(int width, int size);
+    void enableDisableButtons(bool arg);
     void reset();
 public:
 

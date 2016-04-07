@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>408</width>
+    <width>811</width>
     <height>316</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>225</width>
+    <width>230</width>
     <height>125</height>
    </size>
   </property>
@@ -26,6 +26,12 @@
    <string>HanoiWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="minimumSize">
+    <size>
+     <width>230</width>
+     <height>0</height>
+    </size>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -51,7 +57,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Right</string>
+       <string/>
       </property>
       <property name="flat">
        <bool>true</bool>
@@ -67,7 +73,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Left</string>
+       <string/>
       </property>
       <property name="flat">
        <bool>true</bool>
@@ -83,7 +89,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Center</string>
+       <string/>
       </property>
       <property name="flat">
        <bool>true</bool>
@@ -122,13 +128,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>408</width>
+     <width>811</width>
      <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuGame">
     <property name="title">
-     <string>Game</string>
+     <string>&amp;Game</string>
     </property>
     <addaction name="actionNew_Game"/>
     <addaction name="actionSet_Disks"/>
@@ -136,7 +142,7 @@
    </widget>
    <widget class="QMenu" name="menuPlay">
     <property name="title">
-     <string>Play</string>
+     <string>&amp;Play</string>
     </property>
     <addaction name="actionReset_Game"/>
     <addaction name="actionUndo_Move"/>
@@ -149,27 +155,27 @@
   </widget>
   <action name="actionNew_Game">
    <property name="text">
-    <string>New Game</string>
+    <string>&amp;New Game</string>
    </property>
   </action>
   <action name="actionSet_Disks">
    <property name="text">
-    <string>Set Disks</string>
+    <string>Set &amp;Disks</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>E&amp;xit</string>
    </property>
   </action>
   <action name="actionReset_Game">
    <property name="text">
-    <string>Reset Game</string>
+    <string>&amp;Reset Game</string>
    </property>
   </action>
   <action name="actionUndo_Move">
    <property name="text">
-    <string>Undo Move</string>
+    <string>&amp;Undo Move</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -177,12 +183,12 @@
   </action>
   <action name="actionAuto_Play">
    <property name="text">
-    <string>Auto-Play</string>
+    <string>&amp;Auto-Play</string>
    </property>
   </action>
   <action name="actionUndo_All">
    <property name="text">
-    <string>Undo All</string>
+    <string>Undo &amp;All</string>
    </property>
   </action>
  </widget>

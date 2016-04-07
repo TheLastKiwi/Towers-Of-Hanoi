@@ -5,7 +5,7 @@
 #include "move.h"
 #include "math.h"
 #include <stack>
-//#include <iostream>
+#include <iostream>
 #include <queue>
 
 #include "QtWidgets"
@@ -34,46 +34,82 @@ HanoiWindow::HanoiWindow(QWidget *parent) :
     for(int i = numDisks; i >0; i--){
         left->addDisk(new Disk(i));
     }
+
     //initial setup done
 
 
 }
 void HanoiWindow::paintDisk(Pole *p, int diskIndex, QPushButton *b){
     QColor outerDisk(43,207,255);
+    QColor sideDisk(0,200,255);
     QColor innerDisk(0,100,100);
     QColor pole(128,64,64);
-
+    QBrush brush(Qt::SolidPattern);// = new Brush();
+    //brush.setStyle(Qt::SolidPattern);
     QPainter painter(this);
-    int diskWidth = getWidth(b->width(),p->stack[diskIndex].getSize());
+    int diskWidth = std::max(getWidth(b->width(),p->stack[diskIndex].getSize()),5);
     int diskHeight = std::min((b->height()/2)/ui->sbNumDisks->value(),ui->sbNumDisks->value()*9/4);
-    int center = b->x()+b->width()/2;
+    int xAxis = b->x()+b->width()/2;
     int yAxis = b->height()*3/4;
 
     int elipseHeight = diskWidth*4/9;
 
-    QPoint c(center,yAxis-diskHeight*diskIndex);
-    //20+
+    QPoint c(xAxis,yAxis-diskHeight*diskIndex);
 
-    painter.drawEllipse(c,diskWidth,elipseHeight);
+
+    brush.setColor(sideDisk);
+    painter.setBrush(brush);
+    painter.drawEllipse(c,diskWidth,elipseHeight);//bottom Elipse
+    brush.setColor(outerDisk);
+    painter.setBrush(brush);
+    c=QPoint(xAxis,(yAxis-diskHeight*diskIndex)-diskHeight*2/3);
+    painter.drawEllipse(c,diskWidth,elipseHeight);//top Elipse
+
+    brush.setColor(innerDisk);
+    painter.setBrush(brush);
+    painter.drawEllipse(c,3,12/9);//center hole
+    //painter.drawRect();//pole
+
     //QBrush *b = new QBrush(QColor(Qt::red));
     //painter.
 
 }
 int HanoiWindow::getWidth(int width, int size){
     int w = width*8/10;
-    int min = 20;
+    int min = 10;
     double factor = (w-min)/ui->sbNumDisks->value();
     return (int)(size*factor/2);
 }
 
 void HanoiWindow::paintHover(Pole *p, int diskIndex, QPushButton *b){
+    QColor outerDisk(43,207,255);
+    QColor sideDisk(0,200,255);
+    QColor innerDisk(0,100,100);
+    QColor pole(128,64,64);
+    QBrush brush(Qt::SolidPattern);// = new Brush();
+    //brush.setStyle(Qt::SolidPattern);
     QPainter painter(this);
-    int width = b->width();
-    int center = b->x()+width/2;
-    QPoint c(center,b->height()*.3-diskIndex*10);
-    painter.drawEllipse(c,
-                        p->stack[diskIndex].getSize(),
-                        p->stack[diskIndex].getSize()/2);
+    int diskWidth = std::max(getWidth(b->width(),p->stack[diskIndex].getSize()),5);
+    int diskHeight = std::min((b->height()/2)/ui->sbNumDisks->value(),ui->sbNumDisks->value()*9/4);
+    int xAxis = b->x()+b->width()/2;
+    int yAxis = b->height()*1/4;
+
+    int elipseHeight = diskWidth*4/9;
+
+    QPoint c(xAxis,yAxis+diskHeight);
+    //20+
+
+    brush.setColor(sideDisk);
+    painter.setBrush(brush);
+    painter.drawEllipse(c,diskWidth,elipseHeight);//bottom Elipse
+    brush.setColor(outerDisk);
+    painter.setBrush(brush);
+    c=QPoint(xAxis,(yAxis+diskHeight)-diskHeight*2/3);
+    painter.drawEllipse(c,diskWidth,elipseHeight);//top Elipse
+
+    brush.setColor(innerDisk);
+    painter.setBrush(brush);
+    painter.drawEllipse(c,3,12/9);//center hole
 }
 void HanoiWindow::paintAllDisks(Pole *p, QPushButton *b){
     for(int i = 0; i < p->numDisks; i++){
@@ -97,82 +133,6 @@ void HanoiWindow::paintEvent(QPaintEvent *event){
     paintAllDisks(center,ui->btnCenter);
     paintAllDisks(right,ui->btnRight);
 
-
-        /*&static const QPoint hourHand[3] = {
-        QPoint(7, 8),
-        QPoint(-7, 8),
-        QPoint(0, -40)
-    };
-    static const QPoint minuteHand[3] = {
-        QPoint(7, 8),
-        QPoint(-7, 8),
-        QPoint(0, -70)
-    };
-
-    QColor hourColor(127, 0, 127);
-    QColor minuteColor(0, 127, 127, 191);
-
-    int side = qMin(width(), height());
-    QTime time = QTime::currentTime();
-//! [10]
-
-//! [11]
-    QPainter painter(this);
-//! [11] //! [12]
-    painter.setRenderHint(QPainter::Antialiasing);
-//! [12] //! [13]
-    painter.translate(width() / 2, height() / 2);
-//! [13] //! [14]
-    painter.scale(side / 200.0, side / 200.0);
-//! [9] //! [14]
-
-//! [15]
-    painter.setPen(Qt::NoPen);
-//! [15] //! [16]
-    painter.setBrush(hourColor);
-//! [16]
-
-//! [17] //! [18]
-    painter.save();
-//! [17] //! [19]
-    painter.rotate(30.0 * ((time.hour() + time.minute() / 60.0)));
-    painter.drawConvexPolygon(hourHand, 3);
-    painter.restore();
-//! [18] //! [19]
-
-//! [20]
-    painter.setPen(hourColor);
-//! [20] //! [21]
-
-    for (int i = 0; i < 12; ++i) {
-        painter.drawLine(88, 0, 96, 0);
-        painter.rotate(30.0);
-    }
-//! [21]
-
-//! [22]
-    painter.setPen(Qt::NoPen);
-//! [22] //! [23]
-    painter.setBrush(minuteColor);
-
-//! [24]
-    painter.save();
-    painter.rotate(6.0 * (time.minute() + time.second() / 60.0));
-    painter.drawConvexPolygon(minuteHand, 3);
-    painter.restore();
-//! [23] //! [24]
-
-//! [25]
-    painter.setPen(minuteColor);
-//! [25] //! [26]
-
-//! [27]
-    for (int j = 0; j < 60; ++j) {
-        if ((j % 5) != 0)
-            painter.drawLine(92, 0, 96, 0);
-        painter.rotate(6.0);
-    }
-    */
 }
 
 HanoiWindow::~HanoiWindow(){
@@ -203,10 +163,12 @@ void HanoiWindow::click(Pole *p){
             m->move();
         }
         else{
+            source->hover = false;
             source = 0;//nullptr;
             dest = 0;//nullptr;
             moving = false;
-            p->hover = false;
+
+            update();
         }
     }
     else{
@@ -275,6 +237,7 @@ void HanoiWindow::on_actionExit_triggered()
 }
 void HanoiWindow::delay(){
     if(autoMoves.empty()){
+        enableDisableButtons(true);
         timer->stop();
     }
     else{
@@ -286,13 +249,15 @@ void HanoiWindow::delay(){
 }
 void HanoiWindow::on_actionAuto_Play_triggered()
 {
+
     autoPlayHanoi(ui->sbNumDisks->value(),left,center,right);
-    reset();
+    //reset();
     timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(delay()));
     //connect(timer,SIGNAL(timeout()),this,SLOT())
-    timer->start(5);
+    timer->start(500);
+    enableDisableButtons(false);
 
 }
 void HanoiWindow::autoPlayHanoi(int disk,Pole *source, Pole *dest, Pole *spare){
@@ -315,18 +280,29 @@ void HanoiWindow::undo(){
         Move *m = playerMoves.top();
         m->reverseMove();
         playerMoves.pop();
+        update();
     }
     else{
         timer->stop();
+        enableDisableButtons(true);
     }
+}
+
+
+void HanoiWindow::enableDisableButtons(bool arg){
+    ui->btnCenter->setEnabled(arg);
+    ui->btnLeft->setEnabled(arg);
+    ui->btnRight->setEnabled(arg);
+    ui->menuBar->setEnabled(arg);
 }
 
 void HanoiWindow::on_actionUndo_All_triggered()
 {
+    enableDisableButtons(true);
     timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(undo()));
 
     //connect(timer,SIGNAL(timeout()),this,SLOT())
-    timer->start(50);
+    timer->start(500);
 }
